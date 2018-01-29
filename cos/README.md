@@ -1,7 +1,9 @@
 腾讯云对象存储(COS)
 ===
 
-Docs : [https://cloud.tencent.com/document/product/436](https://cloud.tencent.com/document/product/436)
+[![GoDoc](https://godoc.org/github.com/zhengchun/qcloud-sdk-go/cos?status.svg)](https://godoc.org/github.com/zhengchun/qcloud-sdk-go/cos)
+
+API Docs : [https://cloud.tencent.com/document/product/436](https://cloud.tencent.com/document/product/436)
 
 支持的API接口
 ===

@@ -3,6 +3,7 @@ package cos
 import (
 	"crypto/hmac"
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -26,9 +27,32 @@ type Bucket struct {
 	AppId, Name, Region string
 }
 
-// Address返回桶的访问域名地址(XML API)，URL不包含`/`路径。
-func (b *Bucket) Address() string {
+// URL返回桶的访问域名地址(XML API)，URL不包含`/`路径。
+func (b *Bucket) URL() string {
 	return fmt.Sprintf("https://%s-%s.cos.%s.myqcloud.com", b.Name, b.AppId, b.Region)
+}
+
+func (b *Bucket) String() string {
+	return b.URL()
+}
+
+// ParseURL解析桶访问的域名地址，并返回配置。
+func ParseBucketURL(urlStr string) (*Bucket, error) {
+	u, err := url.Parse(urlStr)
+	if err != nil {
+		return nil, err
+	}
+	a := strings.Split(u.Host, ".")
+	if len(a) != 5 {
+		return nil, errors.New("invalid bucket URL")
+	}
+	p := a[0]
+	i := strings.LastIndex(p, "-")
+	return &Bucket{
+		Region: a[2],
+		Name:   p[:i],
+		AppId:  p[i+1:],
+	}, nil
 }
 
 // 客户端，执行COS操作请求。
@@ -137,7 +161,7 @@ func requestFailure(method string, resp *http.Response) error {
 		return err
 	}
 	root := xmlquery.FindOne(doc, "Error")
-	return RequestFailure{
+	return &RequestFailure{
 		HttpMethod:     method,
 		HttpStatusCode: resp.StatusCode,
 		ErrorCode:      xmlquery.FindOne(root, "Code").InnerText(),
@@ -279,7 +303,7 @@ func (c *Client) DeleteObject(url string) error {
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 200, 204:
-		// 请求中删除一个不存在的 Object，仍然认为是成功的，返回 204 No Content。
+		// 204状态码，请求中删除一个不存在的 Object，仍然认为是成功的，返回 204 No Content。
 		return nil
 	}
 	return requestFailure(req.Method, resp)

@@ -21,6 +21,30 @@ func readConf() Config {
 
 var client = NewClient(readConf())
 
+func TestParseBucketURL(t *testing.T) {
+	testBuckets := []struct {
+		url  string
+		want Bucket
+	}{
+		{
+			url:  "https://test-123-1203324242.cos.ap-shanghai.myqcloud.com",
+			want: Bucket{Name: "test-123", AppId: "1203324242", Region: "ap-shanghai"},
+		},
+		{
+			url:  "https://test-1203324242.cos.ap-beijing.myqcloud.com",
+			want: Bucket{Name: "test", AppId: "1203324242", Region: "ap-beijing"},
+		},
+	}
+	for _, tb := range testBuckets {
+		b, err := ParseBucketURL(tb.url)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if g, e := b.String(), tb.want.String(); g != e {
+			t.Errorf("expected %s but got %s", e, g)
+		}
+	}
+}
 func TestListBucket(t *testing.T) {
 	_, err := client.ListBuckets()
 	if err != nil {
@@ -76,7 +100,7 @@ func TestObjectOperations(t *testing.T) {
 
 	// 创建新的对象。
 	body := "HELLO,WORLD!"
-	var objURL = bucket.Address() + "/1.txt" //格式化转为绝对URL路径。
+	var objURL = bucket.URL() + "/1.txt" //格式化转为绝对URL路径。
 	if err := putObject(objURL, strings.NewReader(body)); err != nil {
 		t.Fatal(err)
 	}

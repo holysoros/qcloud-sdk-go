@@ -13,6 +13,6 @@ type RequestFailure struct {
 	TraceId        string
 }
 
-func (e RequestFailure) Error() string {
+func (e *RequestFailure) Error() string {
 	return fmt.Sprintf("%s %s - %d[%s]", e.HttpMethod, e.ResourceURL, e.HttpStatusCode, e.ErrorCode)
 }

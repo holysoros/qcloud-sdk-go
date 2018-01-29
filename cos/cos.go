@@ -181,10 +181,10 @@ func (c *Client) ListBuckets() ([]*Bucket, error) {
 	var buckets []*Bucket
 	for _, elem := range xmlquery.Find(doc, "//Buckets/Bucket") {
 		name := xmlquery.FindOne(elem, "Name").InnerText()
-		a := strings.Split(name, "-")
+		i := strings.LastIndex(name, "-")
 		buckets = append(buckets, &Bucket{
-			Name:   a[0],
-			AppId:  a[1],
+			Name:   name[:i],
+			AppId:  name[i+1:],
 			Region: xmlquery.FindOne(elem, "Location").InnerText(),
 		})
 	}

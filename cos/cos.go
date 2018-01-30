@@ -219,7 +219,8 @@ func (c *Client) ListBuckets() ([]*Bucket, error) {
 // header参数自定义HTTP请求的标头内容，可以配置Bucket的访问权限。
 // https://cloud.tencent.com/document/product/436/7738
 func (c *Client) PutBucket(name, region string, header map[string]string) (*Bucket, error) {
-	endpoint := fmt.Sprintf("https://%s-%s.cos.%s.myqcloud.com/", name, c.cf.AppId, region)
+	bucket := Bucket{AppId: c.cf.AppId, Name: name, Region: region}
+	endpoint := bucket.URL() + "/"
 	req, _ := createRequest("PUT", endpoint, header, nil)
 	resp, err := c.send(req)
 	if err != nil {
@@ -238,7 +239,8 @@ func (c *Client) PutBucket(name, region string, header map[string]string) (*Buck
 
 // DeleteBucket删除一个指定的存储桶(Bucket)。
 func (c *Client) DeleteBucket(name, region string) error {
-	endpoint := fmt.Sprintf("https://%s-%s.cos.%s.myqcloud.com/", name, c.cf.AppId, region)
+	bucket := Bucket{AppId: c.cf.AppId, Name: name, Region: region}
+	endpoint := bucket.URL() + "/"
 	req, _ := createRequest("DELETE", endpoint, nil, nil)
 	resp, err := c.send(req)
 	if err != nil {

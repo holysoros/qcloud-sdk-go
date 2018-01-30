@@ -1,10 +1,10 @@
-腾讯云SDK
-===
+[![Build Status](https://travis-ci.org/zhengchun/qcloud-sdk-go.svg?branch=master)](https://travis-ci.org/zhengchun/qcloud-sdk-go) [![Go Report Card](https://goreportcard.com/badge/github.com/zhengchun/qcloud-sdk-go)](https://goreportcard.com/report/github.com/zhengchun/qcloud-sdk-go) [![GoDoc](https://godoc.org/github.com/zhengchun/qcloud-sdk-go?status.svg)](https://godoc.org/github.com/zhengchun/qcloud-sdk-go) [![Coverage Status](https://coveralls.io/repos/github/zhengchun/qcloud-sdk-go/badge.svg?branch=master)](https://coveralls.io/github/zhengchun/qcloud-sdk-go?branch=master) [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/zhengchun/qcloud-sdk-go/blob/master/LICENSE)
 
-[![GoDoc](https://godoc.org/github.com/zhengchun/qcloud-sdk-go?status.svg)](https://godoc.org/github.com/zhengchun/qcloud-sdk-go)
+# QCloud SDK For Go
 
-Golang版本，非官方SDK包。
+非官方的腾讯云SDK开发包。
 
+开发环境： Go 1.8+
 
 产品列表
 ===

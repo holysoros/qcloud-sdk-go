@@ -234,6 +234,7 @@ func (c *Client) PutBucket(name, region string, header map[string]string) (*Buck
 }
 
 // DeleteBucket删除一个指定的存储桶(Bucket)。
+// https://cloud.tencent.com/document/product/436/7732
 func (c *Client) DeleteBucket(name, region string) error {
 	bucket := Bucket{AppId: c.cf.AppId, Name: name, Region: region}
 	endpoint := bucket.URL() + "/"
@@ -269,22 +270,22 @@ func (c *Client) PutObject(url string, body io.Reader, header map[string]string)
 	return requestFailure(req.Method, resp)
 }
 
-// GetObject返回指定文件的响应内容。
+// GetObject返回指定文件的响应内容和标头。
 // https://cloud.tencent.com/document/product/436/7753
-func (c *Client) GetObject(url string) (io.ReadCloser, error) {
+func (c *Client) GetObject(url string) (io.ReadCloser, http.Header, error) {
 	req, err := createRequest("GET", url, nil, nil)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	resp, err := c.send(req)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	if resp.StatusCode == 200 {
-		return resp.Body, nil
+		return resp.Body, resp.Header, nil
 	}
 	defer resp.Body.Close()
-	return nil, requestFailure(req.Method, resp)
+	return nil, nil, requestFailure(req.Method, resp)
 }
 
 // DeleteObject删除指定的文件。

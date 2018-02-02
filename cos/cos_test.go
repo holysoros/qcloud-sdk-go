@@ -74,7 +74,7 @@ func TestBucketOperations(t *testing.T) {
 }
 
 func getObject(resourceURL string) ([]byte, error) {
-	rc, err := client.GetObject(resourceURL)
+	rc, _, err := client.GetObject(resourceURL)
 	if err != nil {
 		return nil, err
 	}

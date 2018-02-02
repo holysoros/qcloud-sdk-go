@@ -228,11 +228,7 @@ func (c *Client) PutBucket(name, region string, header map[string]string) (*Buck
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode == 200 {
-		return &Bucket{
-			Name:   name,
-			AppId:  c.cf.AppId,
-			Region: region,
-		}, nil
+		return &bucket, nil
 	}
 	return nil, requestFailure(req.Method, resp)
 }
